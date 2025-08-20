@@ -1,1 +1,1 @@
-{"root":["./src/env.d.ts","./src/main.ts","./src/composables/usegallery.ts","./src/data/images.ts","./src/types/index.ts","./env.d.ts"],"version":"5.9.2"}
+{"root":["./src/main.ts","./src/composables/usegallery.ts","./src/data/images.ts","./src/types/index.ts","./env.d.ts"],"version":"5.9.2"}
