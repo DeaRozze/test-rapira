@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, onBeforeUnmount } from 'vue'
+import { onMounted } from 'vue'
 
 const emit = defineEmits<{ (e: 'close'): void }>()
 
