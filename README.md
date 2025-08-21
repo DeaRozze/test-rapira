@@ -1,41 +1,65 @@
 # Галерея (Vue 3 + TypeScript + Tailwind CSS + SASS, БЭМ)
 
-Одностраничное приложение: галерея изображений с поиском, фильтрами и модальным окном подробностей.  
-Верстка выполнена по БЭМ: блоки `.header`, `.toolbar`, `.blog`, `.card`, `.chip`, `.modal`, `.search`, элементы `__*`, модификаторы `--*`. Для стилей используется Tailwind CSS через `@apply` внутри SCSS-файлов.
+Одностраничное приложение для отображения галереи изображений с возможностью поиска, фильтрации по категориям и просмотра детальной информации в модальном окне. Приложение построено на современном стеке Vue 3 с TypeScript и стилизовано с помощью Tailwind CSS.
 
 ## Стек
-- Vue 3 (Composition API) + TypeScript
-- Vite
-- Tailwind CSS (утилитарные классы) + SASS/SCSS (BEM, токены, сложная верстка)
-- Vitest (пример теста — для логики фильтрации)
+
+Vue 3 (Composition API) с TypeScript
+
+Vite - сборщик проекта
+
+Tailwind CSS - утилитарный CSS-фреймворк
+
+SASS/SCSS - препроцессор для стилей
+
+Vitest - фреймворк для тестирования
+
+БЭМ (Блок-Элемент-Модификатор) - методология именования классов
 
 ## Запуск
-```bash
-pnpm i     # или npm i / yarn
-pnpm dev   # старт dev-сервера
-pnpm build # сборка
-pnpm preview # предпросмотр сборки
+
+```bash 
+npm install # Установка зависимостей
+npm run dev   # старт dev-сервера
+npm run build # сборка
+npm run preview # предпросмотр сборки
 ```
 
 ## Архитектура
+
 ```
 src/
-  assets/styles/index.scss   # Tailwind + BEM-слои
-  components/                # мелкие переиспользуемые компоненты (Base*) и составные блоки
-  composables/useGallery.ts  # бизнес-логика: поиск, фильтры, состояние модалки
-  data/images.ts             # мок-данные
-  types/index.ts             # типы (Category, ImageItem)
-  App.vue                    # композиция страницы
-  main.ts
+├── assets/
+│   ├── images/          # Статические изображения
+│   └── styles/
+│       └── index.scss   # Глобальные стили (Tailwind + BEM)
+├── components/
+│   ├── BaseBadge.vue    # Базовый компонент бейджа
+│   ├── BaseChip.vue     # Базовый компонент чипа
+│   ├── BaseModal.vue    # Базовый компонент модального окна
+│   ├── FilterBar.vue    # Панель фильтров
+│   ├── GalleryGrid.vue  # Сетка галереи
+│   ├── GalleryModal.vue # Модальное окно деталей
+│   ├── HeaderNav.vue    # Навигационная панель
+│   ├── ImageCard.vue    # Карточка изображения
+│   └── SearchInput.vue  # Компонент поиска
+├── composables/
+│   └── useGallery.ts    # Композабл для логики галереи
+├── data/
+│   └── images.ts        # Мок-данные изображений
+├── types/
+│   └── index.ts         # Типы TypeScript
+├── App.vue              # Корневой компонент
+└── main.ts              # Точка входа
 ```
 
 ### Принципы
+
 - **DRY/KISS:** логика фильтрации собрана в `useGallery`.
 - **БЭМ:** нейтральные BEM-классы + Tailwind `@apply` (см. `index.scss`).
 - **Адаптив:** сетка `.blog__grid` переключается на 1/2/3 колонки, контролируется Tailwind breakpoints.
 - **Доступность:** модалка закрывается по `Esc` и по клику по оверлею, body-скролл блокируется.
 
 ## Тесты (опционально)
-Запуск: `pnpm test`
 
-Тесты находятся в `tests/useGallery.test.ts`.
+Запуск: `npm run test`

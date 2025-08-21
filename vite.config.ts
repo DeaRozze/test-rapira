@@ -7,7 +7,7 @@ export default defineConfig({
   css: {
     preprocessorOptions: {
       scss: {
-        api: "modern", 
+        api: "modern",
       },
     },
   },
@@ -18,5 +18,10 @@ export default defineConfig({
   },
   server: {
     port: 5173,
+  },
+  test: {
+    environment: "jsdom",
+    globals: true,
+    include: ["src/**/*.spec.ts", "src/**/*.test.ts"],
   },
 });

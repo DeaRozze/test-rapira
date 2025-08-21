@@ -1,1 +1,1 @@
-{"root":["./src/main.ts","./src/composables/usegallery.ts","./src/data/images.ts","./src/types/index.ts","./env.d.ts"],"version":"5.9.2"}
+{"root":["./src/main.ts","./src/composables/usegallery.ts","./src/data/images.ts","./src/tests/basebadge.spec.ts","./src/tests/basechip.spec.ts","./src/tests/basemodal.spec.ts","./src/tests/usegallery.spec.ts","./src/types/index.ts","./env.d.ts","./vitest.config.ts","./vite.config.ts"],"version":"5.9.2"}

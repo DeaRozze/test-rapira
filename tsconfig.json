@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "types": ["vitest/globals"],
     "target": "ES2020",
     "useDefineForClassFields": true,
     "module": "ESNext",
@@ -16,5 +17,11 @@
       "@/*": ["src/*"]
     }
   },
-  "include": ["src/**/*", "env.d.ts"]
+  "include": [
+    "src/**/*",
+    "env.d.ts",
+    "vitest.config.ts",
+    "vite.config.ts",
+    "tests/**/*"
+  ]
 }

@@ -6,11 +6,15 @@ import GalleryGrid from "@/components/GalleryGrid.vue";
 import GalleryModal from "@/components/GalleryModal.vue";
 import { images } from "@/data/images";
 import { useGallery } from "@/composables/useGallery";
-import { ref, watch, toRefs } from "vue";
+import { ref, watch,computed } from "vue";
 
 const g = useGallery(images);
-const { categories, filtered, selected, isOpen, activeCategories } = toRefs(g);
+const { categories, filtered, selected, isOpen, activeCategories } = g;
 const query = ref("");
+
+const hasSearchQuery = computed(() => {
+  return query.value.trim().length > 0;
+});
 
 watch(query, (newValue) => {
   g.query.value = newValue;
@@ -32,6 +36,7 @@ function clearSearch() {
     <FilterBar
       :categories="categories"
       :active="activeCategories"
+      :has-search-query="hasSearchQuery" 
       @toggle="g.toggleCategory"
       @clear="g.clearCategories"
       @clear-search="clearSearch"

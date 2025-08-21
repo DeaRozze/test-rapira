@@ -8,7 +8,7 @@ const emit = defineEmits<{ (e: "open", item: ImageItem): void }>();
 
 <template>
   <section class="bg-white rounded-xl min-h-screen">
-    <div class="container mx-auto px-4 sm:px-6 py-5">
+    <div class="container mx-auto px-4 sm:py-5">
       <div
         v-if="items.length === 0"
         class="flex flex-col items-center justify-center text-center min-h-96 py-10 px-5"

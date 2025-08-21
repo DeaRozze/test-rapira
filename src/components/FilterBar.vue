@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import BaseChip from "./BaseChip.vue";
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import type { Category } from "@/types";
 
-defineProps<{
+const props = defineProps<{
   categories: Category[];
   active: Set<Category>;
+  hasSearchQuery: boolean; // Добавляем новый пропс
 }>();
 
 const emit = defineEmits<{
@@ -15,10 +16,14 @@ const emit = defineEmits<{
 }>();
 
 const isExpanded = ref(false);
+
+const hasActiveFilters = computed(() => {
+  return props.active.size > 0 || props.hasSearchQuery;
+});
 </script>
 
 <template>
-  <div class="bg-white border-b border-gray-200">
+  <div class="bg-white">
     <div class="container mx-auto py-4 px-4 sm:px-6">
       <div class="flex items-center justify-between gap-4">
         <div class="flex items-center gap-4">
@@ -30,6 +35,7 @@ const isExpanded = ref(false);
 
         <div class="flex items-center gap-3">
           <button
+            v-if="hasActiveFilters"
             class="rounded-full px-3 py-1 text-sm text-blue-600 hover:bg-blue-50 transition"
             @click="
               $emit('clear');
