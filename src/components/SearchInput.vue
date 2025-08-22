@@ -1,31 +1,22 @@
 <script setup lang="ts">
-import { ref, watch, onUnmounted } from "vue";
+import {watch} from "vue";
+import { useDebounce } from "@/composables/useDebounce";
 
 const model = defineModel<string>();
-const searchValue = ref(model.value ?? ""); 
-let timeoutId: ReturnType<typeof setTimeout> | null = null;
+const {
+  value: searchValue,
+  debouncedValue,
+  clear: clearSearch,
+} = useDebounce(model.value ?? "");
 
-watch(searchValue, (newValue) => {
-  if (timeoutId) clearTimeout(timeoutId);
-
-  timeoutId = setTimeout(() => {
-    model.value = newValue;
-  }, 300);
+watch(debouncedValue, (newValue) => {
+  model.value = newValue;
 });
 
 watch(model, (newValue) => {
   if (newValue !== searchValue.value) {
     searchValue.value = newValue ?? "";
   }
-});
-
-function clearSearch() {
-  searchValue.value = "";
-  model.value = "";
-}
-
-onUnmounted(() => {
-  if (timeoutId) clearTimeout(timeoutId);
 });
 </script>
 
@@ -38,7 +29,7 @@ onUnmounted(() => {
     <input
       v-model="searchValue"
       class="w-full h-10 rounded-xl bg-gray-50 pl-9 pr-4 py-2 outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-      type="text" 
+      type="text"
       autocomplete="off"
       placeholder="Поиск"
     />
