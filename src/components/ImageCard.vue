@@ -4,6 +4,7 @@ import type { Image } from "@/types";
 import BaseBadge from "./BaseBadge.vue";
 import ClockIcon from "@/assets/images/clock.svg";
 import CommentIcon from "@/assets/images/comment.svg";
+import { formatDate } from "@/utils/dateFormatter";
 
 const props = defineProps<{
   item: Image;
@@ -12,14 +13,7 @@ const props = defineProps<{
 const emit = defineEmits<{ (e: "open", item: Image): void }>();
 
 const formattedDate = computed(() => {
-  const d = new Date(props.item.date);
-  const day = d.getDate();
-  const month = d.toLocaleDateString("ru-RU", {
-    month: "short",
-  });
-
-  const capitalizedMonth = month.charAt(0).toUpperCase() + month.slice(1, -1);
-  return `${day} ${capitalizedMonth}`;
+  return formatDate(props.item.date);
 });
 </script>
 

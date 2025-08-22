@@ -1,6 +1,8 @@
 <script setup lang="ts">
+import type { Slot } from "vue";
+
 defineSlots<{
-  default?: (props: {}) => any;
+  default?: Slot;
 }>();
 </script>
 

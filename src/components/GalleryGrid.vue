@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import ImageCard from "./ImageCard.vue";
 import type { Image } from "@/types";
+import type { Slot } from "vue";
 
 defineSlots<{
-  default?: (props: {}) => any;
+  default?: Slot;
 }>();
 
 defineProps<{ items: Image[] }>();

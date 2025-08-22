@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { computed } from "vue";
+import type { Slot } from "vue";
 import CloseIcon from "@/assets/images/plus.svg";
 import CheckIcon from "@/assets/images/check.svg";
 
 defineSlots<{
-  default?: (props: {}) => any;
+  default?: Slot;
 }>();
 
 const props = defineProps<{ active?: boolean }>();

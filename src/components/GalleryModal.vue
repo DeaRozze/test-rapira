@@ -1,16 +1,19 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import type { Image } from "@/types";
+import type { Slot } from "vue";
 import BaseModal from "./BaseModal.vue";
 import BaseBadge from "./BaseBadge.vue";
 import ClockIcon from "@/assets/images/clock.svg";
 import CommentIcon from "@/assets/images/comment.svg";
 import UserIcon from "@/assets/images/Ellipse 1.png";
+import { formatDate } from "@/utils/dateFormatter";
+import { formatCommentDate } from "@/utils/commentDateFormatter";
 
 defineSlots<{
-  default?: (props: {}) => any;
-  title?: (props: {}) => any;
-  footer?: (props: {}) => any;
+  default?: Slot;
+  title?: Slot;
+  footer?: Slot;
 }>();
 
 defineProps<{
@@ -24,16 +27,6 @@ interface Comment {
   text: string;
   author: string;
   date: string;
-}
-
-function formatDate(dateStr: string) {
-  const d = new Date(dateStr);
-  const day = d.getDate();
-  const month = d.toLocaleDateString("ru-RU", {
-    month: "short",
-  });
-  const capitalizedMonth = month.charAt(0).toUpperCase() + month.slice(1, -1);
-  return `${day} ${capitalizedMonth}`;
 }
 
 const comments = ref<Comment[]>([
@@ -57,7 +50,7 @@ function publishComment() {
       id: Date.now(),
       text: trimmedComment,
       author: "Вы",
-      date: new Date().toLocaleString("ru-RU"),
+      date: formatCommentDate(new Date()),
     });
     newComment.value = "";
   }
@@ -105,7 +98,7 @@ function clearComment() {
 
       <div class="mt-6">
         <h4 class="text-lg font-semibold mb-3">
-          Комментарии {{ comments.length }}
+          Комментариев {{ comments.length }}
         </h4>
 
         <div class="max-h-60 overflow-y-auto">

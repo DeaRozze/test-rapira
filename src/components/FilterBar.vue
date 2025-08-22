@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import BaseChip from "./BaseChip.vue";
-import { ref, computed} from "vue";
+import { ref, computed, onUnmounted } from "vue";
 import type { Category } from "@/types";
+import type { Slot } from "vue";
 
 defineSlots<{
-  search?: (props: {}) => any;
+  search?: Slot;
 }>();
 
 const props = defineProps<{
@@ -21,6 +22,7 @@ const emit = defineEmits<{
 
 const isExpanded = ref(false);
 const isAnimating = ref(false);
+let timeoutId: ReturnType<typeof setTimeout> | null = null;
 
 const hasActiveFilters = computed(() => {
   return props.active.size > 0 || props.hasSearchQuery;
@@ -29,16 +31,29 @@ const hasActiveFilters = computed(() => {
 function toggleExpanded() {
   if (isAnimating.value) return;
 
+  if (timeoutId) {
+    clearTimeout(timeoutId);
+    timeoutId = null;
+  }
+
   isExpanded.value = !isExpanded.value;
   isAnimating.value = true;
 
-  setTimeout(
+  timeoutId = setTimeout(
     () => {
       isAnimating.value = false;
+      timeoutId = null;
     },
     isExpanded.value ? 500 : 300
   );
 }
+
+onUnmounted(() => {
+  if (timeoutId) {
+    clearTimeout(timeoutId);
+    timeoutId = null;
+  }
+});
 </script>
 
 <template>

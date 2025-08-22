@@ -1,16 +1,6 @@
 import { computed, ref } from "vue";
 import type { Category, Image } from "@/types";
-
-const ALL_CATEGORIES: Category[] = [
-  "Город",
-  "Природа",
-  "Люди",
-  "Животные",
-  "Еда",
-  "Напитки",
-  "Архитектура",
-  "Искусство",
-];
+import { ALL_CATEGORIES } from "@/constants/categories";
 
 export function useGallery(allItems: Image[]) {
   const query = ref("");
@@ -50,9 +40,7 @@ export function useGallery(allItems: Image[]) {
 
     return allItems.filter((item) => {
       const byText = !q || item.title.toLowerCase().includes(q);
-
       const byCats = !cats.size || item.categories.some((c) => cats.has(c));
-
       return byText && byCats;
     });
   });

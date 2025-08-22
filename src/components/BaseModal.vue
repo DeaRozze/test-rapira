@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { onMounted } from "vue";
+import { onMounted, onUnmounted } from "vue";
+import type { Slot } from "vue";
 
 defineSlots<{
-  default?: (props: {}) => any;
-  title?: (props: {}) => any;
-  footer?: (props: {}) => any;
+  default?: Slot;
+  title?: Slot;
+  footer?: Slot;
 }>();
 
 const emit = defineEmits<{ (e: "close"): void }>();
@@ -13,9 +14,12 @@ function onKeyDown(event: KeyboardEvent) {
   if (event.key === "Escape") emit("close");
 }
 
-const MAX_LENGTH = 250 as const;
-
-onMounted(() => document.addEventListener("keydown", onKeyDown));
+onMounted(() => {
+  document.addEventListener("keydown", onKeyDown);
+  onUnmounted(() => {
+    document.removeEventListener("keydown", onKeyDown);
+  });
+});
 </script>
 
 <template>
