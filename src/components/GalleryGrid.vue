@@ -1,9 +1,13 @@
 <script setup lang="ts">
 import ImageCard from "./ImageCard.vue";
-import type { ImageItem } from "@/types";
+import type { Image } from "@/types";
 
-defineProps<{ items: ImageItem[] }>();
-const emit = defineEmits<{ (e: "open", item: ImageItem): void }>();
+defineSlots<{
+  default?: (props: {}) => any;
+}>();
+
+defineProps<{ items: Image[] }>();
+const emit = defineEmits<{ (e: "open", item: Image): void }>();
 </script>
 
 <template>

@@ -3,6 +3,10 @@ import { computed } from "vue";
 import CloseIcon from "@/assets/images/plus.svg";
 import CheckIcon from "@/assets/images/check.svg";
 
+defineSlots<{
+  default?: (props: {}) => any;
+}>();
+
 const props = defineProps<{ active?: boolean }>();
 
 const icon = computed(() => {
@@ -11,11 +15,11 @@ const icon = computed(() => {
 </script>
 
 <template>
-  <button 
+  <button
     class="chip rounded-full px-3 py-1 text-sm leading-none transition flex items-center gap-1"
     :class="{
       'bg-blue-500 text-white': active,
-      'bg-blue-50 text-blue-600': !active
+      'bg-blue-50 text-blue-600': !active,
     }"
   >
     <slot />

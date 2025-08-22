@@ -3,10 +3,14 @@ import BaseChip from "./BaseChip.vue";
 import { ref, computed } from "vue";
 import type { Category } from "@/types";
 
+defineSlots<{
+  search?: (props: {}) => any;
+}>();
+
 const props = defineProps<{
   categories: Category[];
   active: Set<Category>;
-  hasSearchQuery: boolean; // Добавляем новый пропс
+  hasSearchQuery: boolean;
 }>();
 
 const emit = defineEmits<{

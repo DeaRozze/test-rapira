@@ -1,13 +1,21 @@
 <script setup lang="ts">
 import { onMounted } from "vue";
 
+defineSlots<{
+  default?: (props: {}) => any;
+  title?: (props: {}) => any;
+  footer?: (props: {}) => any;
+}>();
+
 const emit = defineEmits<{ (e: "close"): void }>();
 
-function onKey(e: KeyboardEvent) {
-  if (e.key === "Escape") emit("close");
+function onKeyDown(event: KeyboardEvent) {
+  if (event.key === "Escape") emit("close");
 }
 
-onMounted(() => document.addEventListener("keydown", onKey));
+const MAX_LENGTH = 250 as const;
+
+onMounted(() => document.addEventListener("keydown", onKeyDown));
 </script>
 
 <template>
@@ -18,9 +26,9 @@ onMounted(() => document.addEventListener("keydown", onKey));
   >
     <div class="absolute inset-0 bg-black/70" @click="$emit('close')" />
     <div
-      class="relative z-10 bg-white rounded-2xl shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6"
+      class="relative z-10 bg-white rounded-2xl shadow-xl max-w-2xl w-full max-h-[90vh] flex flex-col"
     >
-      <header class="flex items-start justify-between gap-4 mb-4">
+      <header class="flex items-start justify-between gap-4 p-4">
         <h3 class="text-2xl font-semibold text-gray-900">
           <slot name="title" />
         </h3>
@@ -44,10 +52,12 @@ onMounted(() => document.addEventListener("keydown", onKey));
           </svg>
         </button>
       </header>
-      <div class="modal__body">
+
+      <div class="modal__body flex-1 overflow-y-auto px-4 pb-4">
         <slot />
       </div>
-      <footer class="mt-6 flex justify-end">
+
+      <footer class="p-2">
         <slot name="footer" />
       </footer>
     </div>

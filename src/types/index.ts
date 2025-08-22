@@ -8,7 +8,7 @@ export type Category =
   | "Архитектура"
   | "Искусство";
 
-export interface ImageItem {
+export interface Image {
   id: string;
   title: string;
   description: string;

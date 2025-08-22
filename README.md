@@ -27,22 +27,13 @@ npm run preview # предпросмотр сборки
 
 ## Архитектура
 
-```
+```architecture
 src/
 ├── assets/
 │   ├── images/          # Статические изображения
 │   └── styles/
 │       └── index.scss   # Глобальные стили (Tailwind + BEM)
-├── components/
-│   ├── BaseBadge.vue    # Базовый компонент бейджа
-│   ├── BaseChip.vue     # Базовый компонент чипа
-│   ├── BaseModal.vue    # Базовый компонент модального окна
-│   ├── FilterBar.vue    # Панель фильтров
-│   ├── GalleryGrid.vue  # Сетка галереи
-│   ├── GalleryModal.vue # Модальное окно деталей
-│   ├── HeaderNav.vue    # Навигационная панель
-│   ├── ImageCard.vue    # Карточка изображения
-│   └── SearchInput.vue  # Компонент поиска
+├── components/          # Компоненты проекта
 ├── composables/
 │   └── useGallery.ts    # Композабл для логики галереи
 ├── data/

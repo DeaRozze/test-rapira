@@ -1,7 +1,17 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, watch } from "vue";
 
 const isMenuOpen = ref(false);
+
+watch(isMenuOpen, (open) => {
+  if (open) {
+    document.documentElement.style.overflow = "hidden";
+    document.body.style.overflow = "hidden";
+  } else {
+    document.documentElement.style.overflow = "";
+    document.body.style.overflow = "";
+  }
+});
 </script>
 
 <template>
@@ -53,6 +63,10 @@ const isMenuOpen = ref(false);
           >Блог</a
         >
       </nav>
+
+      <div class="ml-auto">
+        <slot name="search" />
+      </div>
 
       <Transition
         enter-active-class="transition-opacity duration-300 ease-out"

@@ -1,5 +1,5 @@
 import { computed, ref } from "vue";
-import type { Category, ImageItem } from "@/types";
+import type { Category, Image } from "@/types";
 
 const ALL_CATEGORIES: Category[] = [
   "Город",
@@ -12,48 +12,47 @@ const ALL_CATEGORIES: Category[] = [
   "Искусство",
 ];
 
-export function useGallery(allItems: ImageItem[]) {
+export function useGallery(allItems: Image[]) {
   const query = ref("");
   const activeCategories = ref<Set<Category>>(new Set());
-  const selected = ref<ImageItem | null>(null);
+  const selected = ref<Image | null>(null);
   const isOpen = ref(false);
 
   function toggleCategory(cat: Category) {
     if (activeCategories.value.has(cat)) {
       activeCategories.value.delete(cat);
-    } else {
-      activeCategories.value.add(cat);
+      return;
     }
+    activeCategories.value.add(cat);
   }
 
   function clearCategories() {
     activeCategories.value.clear();
   }
 
-  function open(item: ImageItem) {
+  function open(item: Image) {
     selected.value = item;
     isOpen.value = true;
+    // Блокируем скролл на основной странице
     document.documentElement.style.overflow = "hidden";
+    document.body.style.overflow = "hidden";
   }
 
   function close() {
     isOpen.value = false;
     selected.value = null;
     document.documentElement.style.overflow = "";
+    document.body.style.overflow = "";
   }
-  const categories = computed<Category[]>(() => {
-    return ALL_CATEGORIES;
-  });
 
-  const filtered = computed<ImageItem[]>(() => {
+  const filtered = computed<Image[]>(() => {
     const q = query.value.trim().toLowerCase();
     const cats = activeCategories.value;
 
     return allItems.filter((item) => {
       const byText = !q || item.title.toLowerCase().includes(q);
 
-      const byCats =
-        !cats.size || item.categories.some((c) => cats.has(c as Category));
+      const byCats = !cats.size || item.categories.some((c) => cats.has(c));
 
       return byText && byCats;
     });
@@ -62,7 +61,7 @@ export function useGallery(allItems: ImageItem[]) {
   return {
     query,
     activeCategories,
-    categories,
+    categories: ALL_CATEGORIES,
     filtered,
     selected,
     isOpen,

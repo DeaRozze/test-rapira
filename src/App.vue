@@ -4,12 +4,24 @@ import SearchInput from "@/components/SearchInput.vue";
 import FilterBar from "@/components/FilterBar.vue";
 import GalleryGrid from "@/components/GalleryGrid.vue";
 import GalleryModal from "@/components/GalleryModal.vue";
-import { images } from "@/data/images";
+import { IMAGES } from "@/data/images";
 import { useGallery } from "@/composables/useGallery";
-import { ref, watch,computed } from "vue";
+import { ref, watch, computed } from "vue";
 
-const g = useGallery(images);
-const { categories, filtered, selected, isOpen, activeCategories } = g;
+const gallery = useGallery(IMAGES);
+const {
+  categories,
+  filtered,
+  selected,
+  isOpen,
+  activeCategories,
+  query: galleryQuery,
+  toggleCategory,
+  clearCategories,
+  open,
+  close,
+} = gallery;
+
 const query = ref("");
 
 const hasSearchQuery = computed(() => {
@@ -17,7 +29,7 @@ const hasSearchQuery = computed(() => {
 });
 
 watch(query, (newValue) => {
-  g.query.value = newValue;
+  galleryQuery.value = newValue;
 });
 
 function clearSearch() {
@@ -27,18 +39,13 @@ function clearSearch() {
 
 <template>
   <div class="app min-h-screen bg-gray-50">
-    <HeaderNav>
-      <template #search>
-        <SearchInput v-model="query" />
-      </template>
-    </HeaderNav>
-
+    <HeaderNav />
     <FilterBar
       :categories="categories"
       :active="activeCategories"
-      :has-search-query="hasSearchQuery" 
-      @toggle="g.toggleCategory"
-      @clear="g.clearCategories"
+      :has-search-query="hasSearchQuery"
+      @toggle="toggleCategory"
+      @clear="clearCategories"
       @clear-search="clearSearch"
     >
       <template #search>
@@ -47,7 +54,7 @@ function clearSearch() {
     </FilterBar>
 
     <div class="bg-gray-50 px-4 sm:px-8 lg:px-12 py-5">
-      <GalleryGrid :items="filtered" @open="g.open" />
+      <GalleryGrid :items="filtered" @open="open" />
     </div>
 
     <Transition
@@ -58,7 +65,7 @@ function clearSearch() {
       leave-from-class="opacity-100"
       leave-to-class="opacity-0"
     >
-      <GalleryModal v-if="isOpen" :item="selected" @close="g.close" />
+      <GalleryModal v-if="isOpen" :item="selected" @close="close" />
     </Transition>
   </div>
 </template>

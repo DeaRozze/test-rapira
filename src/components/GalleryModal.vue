@@ -1,29 +1,43 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import type { ImageItem } from "@/types";
+import type { Image } from "@/types";
 import BaseModal from "./BaseModal.vue";
 import BaseBadge from "./BaseBadge.vue";
 import ClockIcon from "@/assets/images/clock.svg";
 import CommentIcon from "@/assets/images/comment.svg";
 import UserIcon from "@/assets/images/Ellipse 1.png";
 
+defineSlots<{
+  default?: (props: {}) => any;
+  title?: (props: {}) => any;
+  footer?: (props: {}) => any;
+}>();
+
 defineProps<{
-  item: ImageItem | null;
+  item: Image | null;
 }>();
 
 const emit = defineEmits<{ (e: "close"): void }>();
 
-function formatDate(dateStr: string) {
-  const d = new Date(dateStr);
-  return d.toLocaleDateString("ru-RU", {
-    day: "numeric",
-    month: "short",
-  });
+interface Comment {
+  id: number;
+  text: string;
+  author: string;
+  date: string;
 }
 
-const comments = ref<
-  { id: number; text: string; author: string; date: string }[]
->([
+function formatDate(dateStr: string) {
+  const d = new Date(dateStr);
+  const day = d.getDate();
+  const month = d.toLocaleDateString("ru-RU", {
+    month: "short",
+  });
+  // Делаем первую букву месяца заглавной
+  const capitalizedMonth = month.charAt(0).toUpperCase() + month.slice(1);
+  return `${day} ${capitalizedMonth}`;
+}
+
+const comments = ref<Comment[]>([
   {
     id: 1,
     text: "Эти мгновения наполняют наши сердца радостью и любовью.",
@@ -33,14 +47,16 @@ const comments = ref<
 ]);
 
 const newComment = ref("");
-const maxLength = 250;
+const MAX_LENGTH = 250 as const;
 const isFocused = ref(false);
 
 function publishComment() {
-  if (newComment.value.trim()) {
+  const trimmedComment = newComment.value.trim();
+
+  if (trimmedComment) {
     comments.value.push({
       id: Date.now(),
-      text: newComment.value.trim(),
+      text: trimmedComment,
       author: "Вы",
       date: new Date().toLocaleString("ru-RU"),
     });
@@ -90,31 +106,31 @@ function publishComment() {
         </h4>
 
         <div
-          v-for="c in comments"
-          :key="c.id"
+          v-for="comment in comments"
+          :key="comment.id"
           class="flex items-start gap-2 mb-4"
         >
           <img :src="UserIcon" alt="Аватар" class="w-8 h-8 rounded-full" />
           <div>
             <p class="text-sm text-gray-800">
-              <b>{{ c.author }}</b
-              >: {{ c.text }}
+              <b>{{ comment.author }}</b
+              >: {{ comment.text }}
             </p>
-            <span class="text-xs text-gray-400">{{ c.date }}</span>
+            <span class="text-xs text-gray-400">{{ comment.date }}</span>
           </div>
         </div>
 
         <div class="mt-4">
           <textarea
             v-model="newComment"
-            :maxlength="maxLength"
+            :maxlength="MAX_LENGTH"
             rows="3"
             placeholder="Текст комментария"
             @focus="isFocused = true"
             @blur="isFocused = false"
             :class="[
               'w-full rounded-lg p-2 outline-none transition border',
-              newComment.length > maxLength
+              newComment.length > MAX_LENGTH
                 ? 'border-red-500'
                 : isFocused
                 ? 'border-blue-500 ring-1 ring-blue-500'
@@ -124,10 +140,12 @@ function publishComment() {
           <div class="flex justify-between items-center text-sm mt-1">
             <span
               :class="
-                newComment.length > maxLength ? 'text-red-500' : 'text-gray-500'
+                newComment.length > MAX_LENGTH
+                  ? 'text-red-500'
+                  : 'text-gray-500'
               "
             >
-              {{ newComment.length }} / {{ maxLength }}
+              {{ newComment.length }} / {{ MAX_LENGTH }}
             </span>
             <div class="flex gap-2">
               <button
@@ -138,7 +156,7 @@ function publishComment() {
               </button>
               <button
                 class="px-3 py-1 rounded-lg bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition"
-                :disabled="!newComment.trim() || newComment.length > maxLength"
+                :disabled="!newComment.trim() || newComment.length > MAX_LENGTH"
                 @click="publishComment"
               >
                 Опубликовать
