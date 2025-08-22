@@ -32,7 +32,7 @@ function formatDate(dateStr: string) {
   const month = d.toLocaleDateString("ru-RU", {
     month: "short",
   });
-  const capitalizedMonth = month.charAt(0).toUpperCase() + month.slice(1);
+  const capitalizedMonth = month.charAt(0).toUpperCase() + month.slice(1, -1);
   return `${day} ${capitalizedMonth}`;
 }
 
@@ -62,6 +62,10 @@ function publishComment() {
     newComment.value = "";
   }
 }
+
+function clearComment() {
+  newComment.value = "";
+}
 </script>
 
 <template>
@@ -69,14 +73,14 @@ function publishComment() {
     <template #title>{{ item.title }}</template>
 
     <div class="space-y-4">
-      <div class="flex items-center text-sm text-gray-500 gap-2 flex-wrap">
+      <div
+        class="separator-dots items-center text-sm text-gray-500 gap-2 flex-wrap"
+      >
         <span>{{ formatDate(item.date) }}</span>
-        <span class="mx-1 text-gray-400">•</span>
         <div class="flex items-center gap-1">
           <img :src="ClockIcon" alt="Время чтения" class="w-4 h-4" />
           <span>{{ item.readTimeMin }} мин</span>
         </div>
-        <span class="mx-1 text-gray-400">•</span>
         <div class="flex items-center gap-1">
           <img :src="CommentIcon" alt="Комментарии" class="w-4 h-4" />
           <span>{{ comments.length }}</span>
@@ -104,38 +108,66 @@ function publishComment() {
           Комментарии {{ comments.length }}
         </h4>
 
-        <div
-          v-for="comment in comments"
-          :key="comment.id"
-          class="flex items-start gap-2 mb-4"
-        >
-          <img :src="UserIcon" alt="Аватар" class="w-8 h-8 rounded-full" />
-          <div>
-            <p class="text-sm text-gray-800">
-              <b>{{ comment.author }}</b
-              >: {{ comment.text }}
-            </p>
-            <span class="text-xs text-gray-400">{{ comment.date }}</span>
+        <div class="max-h-60 overflow-y-auto">
+          <div
+            v-for="comment in comments"
+            :key="comment.id"
+            class="flex items-start gap-2 mb-4"
+          >
+            <img :src="UserIcon" alt="Аватар" class="w-8 h-8 rounded-full" />
+            <div class="min-w-0 flex-1">
+              <p class="text-sm text-gray-800 break-words">
+                <b>{{ comment.author }}</b
+                >: {{ comment.text }}
+              </p>
+              <span class="text-xs text-gray-400">{{ comment.date }}</span>
+            </div>
           </div>
         </div>
 
         <div class="mt-4">
-          <textarea
-            v-model="newComment"
-            :maxlength="MAX_LENGTH"
-            rows="3"
-            placeholder="Текст комментария"
-            @focus="isFocused = true"
-            @blur="isFocused = false"
-            :class="[
-              'w-full rounded-lg p-2 outline-none transition border',
-              newComment.length > MAX_LENGTH
-                ? 'border-red-500'
-                : isFocused
-                ? 'border-blue-500 ring-1 ring-blue-500'
-                : 'border-gray-300',
-            ]"
-          ></textarea>
+          <div class="relative">
+            <textarea
+              v-model="newComment"
+              :maxlength="MAX_LENGTH"
+              rows="3"
+              placeholder="Текст комментария"
+              @focus="isFocused = true"
+              @blur="isFocused = false"
+              :class="[
+                'w-full rounded-lg p-2 outline-none transition border resize-none pr-10',
+                newComment.length > MAX_LENGTH
+                  ? 'border-red-500'
+                  : isFocused
+                  ? 'border-blue-500 ring-1 ring-blue-500'
+                  : 'border-gray-300',
+              ]"
+              style="min-height: 80px; max-height: 120px"
+            ></textarea>
+
+            <button
+              v-if="newComment"
+              @click="clearComment"
+              class="absolute right-3 top-2 z-10 text-gray-400 hover:text-gray-600 transition-colors"
+              aria-label="Очистить комментарий"
+              type="button"
+            >
+              <svg
+                class="w-5 h-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
+          </div>
+
           <div class="flex justify-between items-center text-sm mt-1">
             <span
               :class="
@@ -148,8 +180,8 @@ function publishComment() {
             </span>
             <div class="flex gap-2">
               <button
-                class="px-3 py-1 rounded-lg border border-gray-300 hover:bg-gray-50 transition"
-                @click="newComment = ''"
+                class="px-3 py-1 rounded-lg transition bg-[#EEF6FF] text-[#3E97FF] hover:bg-[#e0edff]"
+                @click="clearComment"
               >
                 Отмена
               </button>

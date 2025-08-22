@@ -18,7 +18,7 @@ const formattedDate = computed(() => {
     month: "short",
   });
 
-  const capitalizedMonth = month.charAt(0).toUpperCase() + month.slice(1);
+  const capitalizedMonth = month.charAt(0).toUpperCase() + month.slice(1, -1);
   return `${day} ${capitalizedMonth}`;
 });
 </script>
@@ -39,14 +39,14 @@ const formattedDate = computed(() => {
       />
     </div>
     <div class="p-4 flex flex-col">
-      <div class="text-xs text-gray-500 flex items-center gap-2 mb-3 flex-wrap">
+      <div
+        class="separator-dots items-center text-xs text-gray-500 gap-2 mb-3 flex-wrap"
+      >
         <span>{{ formattedDate }}</span>
-        <span class="mx-1 text-gray-400">•</span>
         <div class="flex items-center gap-1">
           <img :src="ClockIcon" alt="Время чтения" class="w-4 h-4" />
           <span>{{ item.readTimeMin }} мин</span>
         </div>
-        <span class="mx-1 text-gray-400">•</span>
         <div class="flex items-center gap-1">
           <img :src="CommentIcon" alt="Комментарии" class="w-4 h-4" />
           <span>{{ item.comments }}</span>
@@ -56,7 +56,7 @@ const formattedDate = computed(() => {
         class="font-semibold text-lg text-gray-900 leading-snug mb-2 line-clamp-2"
       >
         <button
-          class="text-left hover:underline focus:outline-none"
+          class="text-left hover:no-underline focus:outline-none"
           @click="$emit('open', item)"
         >
           {{ item.title }}

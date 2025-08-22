@@ -8,7 +8,6 @@ import { IMAGES } from "@/data/images";
 import { useGallery } from "@/composables/useGallery";
 import { ref, watch, computed } from "vue";
 
-const gallery = useGallery(IMAGES);
 const {
   categories,
   filtered,
@@ -20,7 +19,7 @@ const {
   clearCategories,
   open,
   close,
-} = gallery;
+} = useGallery(IMAGES);
 
 const query = ref("");
 
