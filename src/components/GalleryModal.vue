@@ -32,7 +32,6 @@ function formatDate(dateStr: string) {
   const month = d.toLocaleDateString("ru-RU", {
     month: "short",
   });
-  // Делаем первую букву месяца заглавной
   const capitalizedMonth = month.charAt(0).toUpperCase() + month.slice(1);
   return `${day} ${capitalizedMonth}`;
 }

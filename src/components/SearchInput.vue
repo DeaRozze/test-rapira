@@ -1,20 +1,18 @@
 <script setup lang="ts">
 import { ref, watch, onUnmounted } from "vue";
 
-const model = defineModel<string>(); // то, что пробрасывается наружу
-const searchValue = ref(model.value ?? ""); // локальное состояние для инпута
+const model = defineModel<string>();
+const searchValue = ref(model.value ?? ""); 
 let timeoutId: ReturnType<typeof setTimeout> | null = null;
 
-// Следим за вводом пользователя
 watch(searchValue, (newValue) => {
   if (timeoutId) clearTimeout(timeoutId);
 
   timeoutId = setTimeout(() => {
-    model.value = newValue; // обновляем v-model c задержкой
+    model.value = newValue;
   }, 300);
 });
 
-// Если model меняется извне → синхронизируем input
 watch(model, (newValue) => {
   if (newValue !== searchValue.value) {
     searchValue.value = newValue ?? "";
@@ -40,7 +38,8 @@ onUnmounted(() => {
     <input
       v-model="searchValue"
       class="w-full h-10 rounded-xl bg-gray-50 pl-9 pr-4 py-2 outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-      type="search"
+      type="text" 
+      autocomplete="off"
       placeholder="Поиск"
     />
     <button

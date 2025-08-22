@@ -33,7 +33,6 @@ export function useGallery(allItems: Image[]) {
   function open(item: Image) {
     selected.value = item;
     isOpen.value = true;
-    // Блокируем скролл на основной странице
     document.documentElement.style.overflow = "hidden";
     document.body.style.overflow = "hidden";
   }
